@@ -2,17 +2,25 @@ import React, { Component } from 'react'
 
 export class TablaClientes extends Component {
 
-    clientes = [
-        { nombre: 'Gas Natural', cif: 'A12345678' },
-        { nombre: 'Iberdrola', cif: 'A87654321' },
-        { nombre: 'Jazztel', cif: 'B12345678' },
-        { nombre: 'BBVA', cif: 'C12345678' },
-    ]
+    constructor(props) {
+        super(props);
+        this.state = {
+            isShowHelp: false
+        }
+        //this.handleShowHelp = this.handleShowHelp.bind(this);  Enlaza el this del componente con la función en el elemento
+    }
+
+    handleShowHelp() { // Cuando utilicemos el estado previo para setear el nuevo usaremos una callback
+        this.setState(prevState => {
+            return {isShowHelp: !prevState.isShowHelp}
+        })
+    }
 
 
     render() {
         return (
             <div className='container'>
+                <h1>{this.props.titulo}</h1>
                 <table>
                     <thead>
                         <tr>
@@ -21,14 +29,24 @@ export class TablaClientes extends Component {
                         </tr>
                     </thead>
                     <tbody>
-                        {this.clientes.map(cliente => {
-                            return <tr>
+                        {this.props.clientes.map(cliente => {
+                            return <tr key={cliente.cif}>
                                 <td>{cliente.nombre}</td>
                                 <td>{cliente.cif}</td>
                             </tr>
                         })}
                     </tbody>
                 </table>
+                {
+                    this.state.isShowHelp ?
+                        <>
+                            <button onClick={() => this.handleShowHelp()}>Ocultar Ayuda</button>
+                            <div className='help'>
+                                <p>Lorem ipsum dolor sit,...</p>
+                            </div>
+                        </>
+                    : <button onClick={() => this.handleShowHelp()}>Ver Ayuda</button>
+                }
             </div>
         )
     }
